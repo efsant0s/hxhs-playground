@@ -1,0 +1,40 @@
+package component
+
+templ GenerateDivWitComponent(id string, component templ.Component) {
+    <div id={id}>
+        <h1>Hello, I'm the target of the button</h1> 
+    </div>
+    @component
+}
+templ GenerateEmptyToReplaceDivWithComponenet(id string) {
+    <div id={id}>
+    <h1>Hello, I'm replacing the previous div</h1>
+    </div>
+}
+templ GenerateEmptyDivGET(id string) {
+    <div id={id}>
+    <h1>Hello, I'm the return of button-component-HXGET </h1>
+    </div>
+}
+templ GenerateEmptyDivGETSwapAfterend(id string) {
+    <div id={id}>
+    <h1>Hello, I'm the return of button-component-HXGET swap-afterend</h1>
+    </div>
+}
+templ GenerateEmptyDivPOST(id string) {
+    <div id={id}>
+    <h1>Hello, I'm the return of button-component-HXPOST</h1>
+    </div>
+}
+templ GenerateDivWithInputAndComponent(id string, component templ.Component) {
+    <div id={id}>
+        <input type="text" name="name" placeholder="Enter your name">
+    </div>
+    @component
+}
+templ GenerateEmptyDivGETWithParam(id string, param string) {
+    <div id={id}>
+        <h1>Hello, I'm the return of button-component-HXGET</h1>
+        <p>Received param: {param}</p>
+    </div>
+}

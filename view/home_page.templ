@@ -1,0 +1,104 @@
+package view;
+import("fmt")
+templ DemoPage(){
+    <head>
+            <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+            <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    </head>
+    <h1> Hello World </h1>
+}
+
+type ComponentGroup struct {
+    GroupName    string
+    GroupID      string
+    Components   []templ.Component
+}
+type DemoPageContent struct {
+    PageTitle    string
+    PageID       string
+    Groups       []ComponentGroup
+}
+var loadOnce = templ.NewOnceHandle()
+templ header(PageTitle string) {
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+		<meta name="description" content="This is a demonstration page">
+            <title>{PageTitle}</title>
+        @loadOnce.Once() {
+            <link rel="stylesheet" href="/css/demo-purpose/demo-icons.min.css">
+            <link rel="stylesheet" href="/css/layout.css">
+            <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+            <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+            <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+            <link rel="manifest" href="/site.webmanifest">
+
+            <link rel="stylesheet" href="/css/color-schemes/brand/navy/bootstrap.min.css">
+            <link rel="stylesheet" href="/css/color-schemes/brand/navy/nifty.min.css">
+        }
+	</head>
+}
+templ footer() {
+
+    <footer class="mt-auto">
+    <div class="content__boxed">
+        <div class="content__wrap py-3 py-md-1 d-flex flex-column flex-md-row align-items-md-center">
+            <div class="text-nowrap mb-4 mb-md-0">Copyright &copy; 2024 <a href="#" class="ms-1 btn-link fw-bold">Star Mountain</a></div>
+            <nav class="nav flex-column gap-1 flex-md-row gap-md-3 ms-md-auto" style="row-gap: 0 !important;">
+                <a class="nav-link px-2 px-0" href="#">Policy Privacy</a>
+                <a class="nav-link px-2 px-0" href="#">Terms and conditions</a>
+            </nav>
+        </div>
+    </div>
+    
+    </footer>
+    <script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+}
+templ ComponentGroupTemplate(group ComponentGroup) {
+    <div class="row mb-3" id={group.GroupID}>
+        <div class="col-md-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{group.GroupName}</h5>
+                    <div class="card-text">
+                        for index, component := range group.Components {
+                            <div class="mb-3 d-flex col-md-12" >
+                                <div class="me-3 component-container col-md-3" id={fmt.Sprintf("component-%d", index)} style="flex: 1;">
+                                    @component
+                                </div>
+                                <div class="border rounded p-2 col-md-9" style="flex: 1; background-color: #f8f9fa;">
+                                        <pre><code class="language-html" _={fmt.Sprintf(`on load 
+                                        set container to #component-%d
+                                        log container
+                                        set html to container.innerHTML
+                                        log html
+                                        set my textContent to html`, index)}>
+                                    </code></pre>
+                                </div>
+                            </div>
+                            <hr class="solid">
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+templ MainDemoPage(content DemoPageContent) {
+    <!DOCTYPE html>
+    <html lang="en">
+        @header(content.PageTitle)
+        <body style='background-color: rgb(2, 74, 139);'>
+            <div class="container mt-5">
+                <h1 class="text-white mb-4">{content.PageTitle}</h1>
+                <div id={content.PageID}>
+                    for _, group := range content.Groups {
+                        @ComponentGroupTemplate(group)
+                    }
+                </div>
+            </div>
+            </body>
+        @footer()
+    </html>
+}

@@ -1,0 +1,151 @@
+package component
+
+type ButtonComponentItem struct {
+    ComponentName                string
+    ID                           string
+    ButtonType                   string
+    ButtonLabel                  string
+    ButtonClass                  string
+    ButtonStyle                  string
+    IsDisabled                   bool
+    //HX-Configuration here
+    HXMethod                    string
+    HXEndPoint                  string
+    HXTrigger                    string
+	HXTarget                    string
+    HXSwap                       string
+    HXInclude                    string
+}
+func DefaultButtonComponentItem(id, componentName, buttonLabel string)  ButtonComponentItem {
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+    }
+}
+func ButtonComponentType(id, componentName, buttonLabel, buttonType string)  ButtonComponentItem {
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+        ButtonType: buttonType,
+    }
+}
+func ButtonComponentClass(id, componentName, buttonLabel, buttonClass string)  ButtonComponentItem {
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+        ButtonClass: buttonClass,
+    }
+}
+func ButtonComponentStyle(id, componentName, buttonLabel, buttonStyle string)  ButtonComponentItem {
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+        ButtonStyle: buttonStyle,
+    }
+}
+func ButtonComponentDisabled(id, componentName, buttonLabel string, isDisabled bool)  ButtonComponentItem {
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+        IsDisabled: isDisabled,
+    }
+}
+func ButtonComponentHXGet(id, componentName, buttonLabel, hxEndPoint, hxTrigger string)  ButtonComponentItem {
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+        HXMethod: "hx-get",
+        HXEndPoint: hxEndPoint,
+        HXTrigger: hxTrigger,
+    }
+}
+func ButtonComponentHXPost(id, componentName, buttonLabel, hxEndPoint, hxTrigger string)  ButtonComponentItem {
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+        HXMethod: "hx-post",
+        HXEndPoint: hxEndPoint,
+        HXTrigger: hxTrigger,
+    }
+}
+func ButtonComponentHXGetTarget(id, componentName, buttonLabel, hxEndPoint, hxTarget string)  ButtonComponentItem {
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+        HXTarget: hxTarget,
+        HXMethod: "hx-get",
+        HXEndPoint: hxEndPoint,
+    }
+}
+func ButtonComponentHXGetSwap(id, componentName, buttonLabel, hxEndPoint, hxSwap string) ButtonComponentItem{
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+        HXSwap: hxSwap,
+        HXMethod: "hx-get",
+        HXEndPoint: hxEndPoint,
+    }
+}
+func ButtonComponentHXPostInclude(id, componentName, buttonLabel, hxEndPoint, hxInclude string) ButtonComponentItem{
+    return ButtonComponentItem{
+        ID: id,
+        ComponentName: componentName,
+        ButtonLabel: buttonLabel,
+        HXInclude: hxInclude,
+        HXMethod: "hx-post",
+        HXEndPoint: hxEndPoint,
+    }
+}
+templ ButtonComponent(item ButtonComponentItem) {
+    <button 
+        id={ item.ID }
+
+        if item.ButtonType!= "" {
+            type={ item.ButtonType }
+        }       
+        if item.ButtonClass!= "" {
+            class={ item.ButtonClass }
+        }
+        if item.ButtonStyle!= "" {
+            style={ item.ButtonStyle }
+        }
+        if item.IsDisabled {
+            disabled
+        }
+        if item.HXEndPoint!= "" && (item.HXMethod == "hx-get" || item.HXMethod == "hx-post") {
+            if item.HXMethod  == "hx-get" {
+                hx-get={ item.HXEndPoint }
+            }
+            if item.HXMethod  == "hx-post" {
+                hx-post={ item.HXEndPoint }
+            }
+            if item.HXTrigger != "" {
+                hx-trigger={ item.HXTrigger }
+            } else {
+                hx-trigger="click"
+            }
+            if item.HXTarget != "" {
+                hx-target={ "#"+item.HXTarget }
+            }
+            if item.HXSwap != "" {
+                hx-swap={ item.HXSwap }
+            }
+            if item.HXInclude != "" {
+                hx-include={ "#"+item.HXInclude }
+            }
+        }
+
+
+    >   
+        { item.ButtonLabel }
+    </button>
+}
